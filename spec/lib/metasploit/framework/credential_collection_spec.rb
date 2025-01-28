@@ -334,12 +334,11 @@ RSpec.describe Metasploit::Framework::CredentialCollection do
       let(:password_spray) { true }
       let(:nil_passwords) { true }
 
-      # REMOVE BEFORE COMMIT: yields nothings, fails because of bug in method
       context "without password" do
         let(:password) { nil }
-        specify  do
+        specify do
           expect { |b| collection.each(&b) }.to yield_successive_args(
-            Metasploit::Framework::Credential.new(public: username, private: nil),
+            Metasploit::Framework::Credential.new(public: username, private: nil)
           )
         end
       end
@@ -361,10 +360,9 @@ RSpec.describe Metasploit::Framework::CredentialCollection do
       let(:additional_publics) { [ "test_public" ] }
       let(:user_as_pass) { true }
 
-      # REMOVE BEFORE COMMIT currently failing
-      specify  do
+      specify do
         expect { |b| collection.each(&b) }.to yield_successive_args(
-          Metasploit::Framework::Credential.new(public: "test_public", private: "test_public"),
+          Metasploit::Framework::Credential.new(public: "test_public", private: "test_public")
         )
       end
     end
@@ -376,10 +374,9 @@ RSpec.describe Metasploit::Framework::CredentialCollection do
       let(:user_as_pass) { true }
       let(:password_spray) { true }
 
-      # REMOVE BEFORE COMMIT currently failing
-      specify  do
+      specify do
         expect { |b| collection.each(&b) }.to yield_successive_args(
-          Metasploit::Framework::Credential.new(public: "test_public", private: "test_public"),
+          Metasploit::Framework::Credential.new(public: "test_public", private: "test_public")
         )
       end
     end
@@ -390,10 +387,9 @@ RSpec.describe Metasploit::Framework::CredentialCollection do
       let(:additional_publics) { [ "test_public" ] }
       let(:nil_passwords) { true }
 
-      # REMOVE BEFORE COMMIT: this option is ignored currently for additional_publics
       specify do
         expect { |b| collection.each(&b) }.to yield_successive_args(
-          Metasploit::Framework::Credential.new(public: "test_public", private: nil),
+          Metasploit::Framework::Credential.new(public: "test_public", private: nil)
         )
       end
     end
@@ -406,13 +402,12 @@ RSpec.describe Metasploit::Framework::CredentialCollection do
       let(:blank_passwords) { true }
       let(:password_spray) { true }
 
-      # REMOVE BEFORE COMMIT: fails because no pwd spraying
-      specify  do
+      specify do
         expect { |b| collection.each(&b) }.to yield_successive_args(
           Metasploit::Framework::Credential.new(public: "test_public1", private: nil),
           Metasploit::Framework::Credential.new(public: "test_public2", private: nil),
           Metasploit::Framework::Credential.new(public: "test_public1", private: ""),
-          Metasploit::Framework::Credential.new(public: "test_public2", private: ""),
+          Metasploit::Framework::Credential.new(public: "test_public2", private: "")
         )
       end
     end
@@ -429,12 +424,11 @@ RSpec.describe Metasploit::Framework::CredentialCollection do
         filename
       end
 
-      # REMOVE BEFORE COMMIT: this also yields the usernames as passwords for the additional_public
-      specify  do
+      specify do
         expect { |b| collection.each(&b) }.to yield_successive_args(
           Metasploit::Framework::Credential.new(public: "asdf", private: "password"),
           Metasploit::Framework::Credential.new(public: "jkl", private: "password"),
-          Metasploit::Framework::Credential.new(public: "test_public", private: "password"),
+          Metasploit::Framework::Credential.new(public: "test_public", private: "password")
         )
       end
     end
@@ -445,8 +439,7 @@ RSpec.describe Metasploit::Framework::CredentialCollection do
       let(:username) { nil }
       let(:password) { "pass" }
 
-      # REMOVE BEFORE COMMIT: this yields empty creds (no username, no pass)
-      specify  do
+      specify do
         expect { |b| collection.each(&b) }.to yield_successive_args()
       end
     end
@@ -457,10 +450,9 @@ RSpec.describe Metasploit::Framework::CredentialCollection do
       let(:username) { "user" }
       let(:password) { nil }
 
-      # REMOVE BEFORE COMMIT: this yields empty creds (no username, no pass)
-      specify  do
+      specify do
         expect { |b| collection.each(&b) }.to yield_successive_args(
-          Metasploit::Framework::Credential.new(public: username, private: ''),
+          Metasploit::Framework::Credential.new(public: username, private: '')
         )
       end
     end
@@ -478,11 +470,10 @@ RSpec.describe Metasploit::Framework::CredentialCollection do
         filename
       end
 
-      # REMOVE BEFORE COMMIT: yields nothing, same for blank passwords option
-      specify  do
+      specify do
         expect { |b| collection.each(&b) }.to yield_successive_args(
           Metasploit::Framework::Credential.new(public: "asdf", private: ''),
-          Metasploit::Framework::Credential.new(public: "jkl", private: ''),
+          Metasploit::Framework::Credential.new(public: "jkl", private: '')
         )
       end
     end
@@ -518,8 +509,7 @@ RSpec.describe Metasploit::Framework::CredentialCollection do
       let(:additional_privates) { ['test_private'] }
       let(:additional_publics) { ['test_public'] }
 
-      # REMOVE BEFORE COMMIT: fails because of the useraspass error, then fails because of the nil value for addittonal publics and should be ok then
-      specify  do
+      specify do
         expect { |b| collection.each(&b) }.to yield_successive_args(
           "test_prepend",
           Metasploit::Framework::Credential.new(public: "user", private: nil),
@@ -577,7 +567,7 @@ RSpec.describe Metasploit::Framework::CredentialCollection do
       let(:additional_privates) { ['test_private'] }
       let(:additional_publics) { ['test_public'] }
 
-      specify  do
+      specify do
         expect { |b| collection.each(&b) }.to yield_successive_args(
           "test_prepend",
           Metasploit::Framework::Credential.new(public: "user", private: nil),
@@ -598,7 +588,7 @@ RSpec.describe Metasploit::Framework::CredentialCollection do
           Metasploit::Framework::Credential.new(public: "userpass_user", private: "userpass_pass"),
           Metasploit::Framework::Credential.new(public: "user", private: "test_private"),
           Metasploit::Framework::Credential.new(public: "userfile", private: "test_private"),
-          Metasploit::Framework::Credential.new(public: "test_public", private: "test_private"),
+          Metasploit::Framework::Credential.new(public: "test_public", private: "test_private")
         )
       end
     end
