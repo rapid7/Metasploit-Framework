@@ -10,7 +10,7 @@ on a given template.
     * See https://docs.metasploit.com/docs/pentesting/active-directory/ad-certificates/overview.html#setting-up-a-esc8-vulnerable-host
 2. Start `msfconsole`
 2. Do: `use auxiliary/server/relay/esc8`
-3. Set the `RANDOMIZE_TARGETS` option to the AD CS Web Enrollment server
+3. Set the `RELAY_TARGETS` option to the AD CS Web Enrollment server
 4. Run the module and wait for a request to be relayed
 
 ## Options
@@ -20,10 +20,12 @@ The issue mode. This controls what the module will do once an authenticated sess
 server. Must be one of the following options:
 
 * ALL: Enumerate all available certificate templates and then issue each of them
-* AUTO: Automatically select either the `User` or `Machine` template to issue based on if the authenticated user is a
-  user or machine account. The determination is based on checking for a `$` at the end of the name, which means that it
-  is a machine account.
-* QUERY_ONLY: Enumerate all available certificate templates but do not issue any
+* AUTO: Automatically select either the `User` or `DomainController` and `Machine` (`Computer`) templates to issue
+  based on if the authenticated user is a user or machine account. The determination is based on checking for a `$` 
+  at the end of the name, which means that it is a machine account.
+* QUERY_ONLY: Enumerate all available certificate templates but do not issue any.  Not all certificate templates
+  available for use will be displayed; templates with the flag CT_FLAG_MACHINE_TYPE set will not show available and 
+  include `Machine` (AKA `Computer`) and `DomainController`  
 * SPECIFIC_TEMPLATE: Issue the certificate template specified in the `CERT_TEMPLATE` option
 
 ### CERT_TEMPLATE
