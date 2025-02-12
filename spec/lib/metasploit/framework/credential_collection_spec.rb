@@ -16,9 +16,7 @@ RSpec.describe Metasploit::Framework::CredentialCollection do
       prepended_creds: prepended_creds,
       additional_privates: additional_privates,
       additional_publics: additional_publics,
-      password_spray: password_spray,
-      ignore_public: ignore_public,
-      ignore_private: ignore_private
+      password_spray: password_spray
     )
   end
 
@@ -41,8 +39,6 @@ RSpec.describe Metasploit::Framework::CredentialCollection do
   let(:additional_privates) { [] }
   let(:additional_publics) { [] }
   let(:password_spray) { false }
-  let(:ignore_public) { nil }
-  let(:ignore_private) { nil }
 
   describe "#each" do
     specify do
@@ -596,34 +592,6 @@ RSpec.describe Metasploit::Framework::CredentialCollection do
         )
       end
     end
-
-    context 'when :ignore_public is true and :username is nil' do
-      let(:ignore_public) { true }
-      let(:username) { nil }
-      specify  do
-        expect { |b| collection.each(&b) }.to_not yield_control
-      end
-    end
-
-    context 'when :ignore_private is true and password is nil' do
-      let(:ignore_private) { true }
-      let(:password) { nil }
-      specify  do
-        expect { |b| collection.each(&b) }.to yield_successive_args(
-          Metasploit::Framework::Credential.new(public: username, private: nil)
-        )
-      end
-
-      context 'when :ignore_public is also true and username is nil' do
-        let(:ignore_public) { true }
-        let(:username) { nil }
-        specify  do
-          expect { |b| collection.each(&b) }.to yield_successive_args(
-            Metasploit::Framework::Credential.new(public: nil, private: nil)
-          )
-        end
-      end
-    end
   end
 
   describe "#empty?" do
@@ -693,21 +661,6 @@ RSpec.describe Metasploit::Framework::CredentialCollection do
             expect(collection.empty?).to eq true
           end
         end
-
-        context "and :ignore_public is set" do
-          let(:ignore_public) { true }
-          specify do
-            expect(collection.empty?).to eq true
-          end
-
-          context "and :ignore_private is also set" do
-            let(:ignore_private) { true }
-            specify do
-              expect(collection.empty?).to eq false
-            end
-          end
-        end
-
       end
     end
   end
